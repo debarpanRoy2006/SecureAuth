@@ -1,0 +1,154 @@
+{% extends 'auth_app/base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+
+{% block content %}
+<div class="card shadow-lg p-5 border-0 rounded-xl w-100 mx-auto" style="max-width: 960px;">
+    <h2 class="text-center mb-5 fw-bold text-dark">Your Account Dashboard</h2>
+
+    {% if messages %}
+        <div class="mb-4 w-100">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <ul class="nav nav-pills nav-justified mb-5 border-bottom pb-3">
+        <li class="nav-item">
+            <a class="nav-link px-4 py-3 text-lg fw-medium rounded-lg {% if current_section == 'main' %}active{% else %}text-secondary{% endif %}" href="{% url 'dashboard' %}">Overview</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link px-4 py-3 text-lg fw-medium rounded-lg {% if current_section == 'change_password' %}active{% else %}text-secondary{% endif %}" href="{% url 'dashboard_section' section='change_password' %}">Change Password</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link px-4 py-3 text-lg fw-medium rounded-lg {% if current_section == 'help' %}active{% else %}text-secondary{% endif %}" href="{% url 'dashboard_section' section='help' %}">Help</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link px-4 py-3 text-lg fw-medium rounded-lg {% if current_section == 'about' %}active{% else %}text-secondary{% endif %}" href="{% url 'dashboard_section' section='about' %}">About</a>
+        </li>
+    </ul>
+
+    <div class="tab-content w-100">
+        {% if current_section == 'main' %}
+            <div class="text-center p-4">
+                <h3 class="h3 fw-bold text-dark mb-4">Account Overview</h3>
+                <p class="text-dark fs-5 mb-2">Welcome back, <span class="fw-bold">{{ user.username }}</span>!</p>
+                <p class="text-muted mb-2">Your email: <span class="fw-medium text-primary">{{ user.email }}</span></p>
+                <p class="text-muted small mb-2">User ID: <code class="bg-light px-2 py-1 rounded">{{ user.id }}</code></p>
+                <p class="text-muted small mb-4">Last login: {{ user.last_login }} GMT</p>
+                <hr>
+                <p class="text-muted">Use the navigation above to change your password, find help, or learn more about SecureAuth.</p>
+            </div>
+
+        {% elif current_section == 'change_password' %}
+            <div class="text-center p-4 mx-auto" style="max-width: 500px;">
+                <h3 class="h3 fw-bold text-dark mb-4">Change Your Password</h3>
+                <p class="text-muted mb-4">Enter your current and new password below to update your credentials securely.</p>
+                <form method="post" action="{% url 'dashboard_section' section='change_password' %}" class="needs-validation" novalidate>
+                    {% csrf_token %}
+                    {% for field in password_change_form %}
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold text-muted" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                            {{ field }}
+                            {% for error in field.errors %}<div class="text-danger small mt-1">{{ error }}</div>{% endfor %}
+                        </div>
+                    {% endfor %}
+                    <button type="submit" class="btn btn-custom-primary w-100 py-3 mb-3">Change Password</button>
+                </form>
+            </div>
+
+        {% elif current_section == 'help' %}
+            <div class="help-section text-center py-4">
+                <h2 class="mb-4 fw-bold text-dark">Help & FAQ</h2>
+                <p class="lead mb-5 text-muted">Common issues and tips for SecureAuth.</p>
+                <div class="accordion" id="helpAccordion">
+                    <div class="accordion-item mb-3">
+                        <h2 class="accordion-header" id="faq1">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1" aria-expanded="true">How do I reset my password?</button>
+                        </h2>
+                        <div id="collapse1" class="accordion-collapse collapse show">
+                            <div class="accordion-body">Go to the login page, click on "Forgot Password?" and follow the instructions.</div>
+                        </div>
+                    </div>
+                    <div class="accordion-item mb-3">
+                        <h2 class="accordion-header" id="faq2">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2">Why can't I log in?</button>
+                        </h2>
+                        <div id="collapse2" class="accordion-collapse collapse">
+                            <div class="accordion-body">Make sure your username and password are correct. If you forgot them, use the reset feature.</div>
+                        </div>
+                    </div>
+                    <div class="accordion-item mb-3">
+                        <h2 class="accordion-header" id="faq3">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse3">Is my data secure?</button>
+                        </h2>
+                        <div id="collapse3" class="accordion-collapse collapse">
+                            <div class="accordion-body">Yes. We use Django’s secure password hashing and session management.</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-5 border-top pt-4 text-center">
+                <h4 class="fw-bold mb-3">Still need help?</h4>
+            <p class="mb-3 text-muted">If your issue isn't listed above or you're stuck, feel free to reach out. We're here to assist you!</p>
+            <div class="d-flex flex-column flex-md-row justify-content-center gap-3">
+                <a href="mailto:debarpanroy984@gmail.com" class="btn btn-custom-primary">
+                <i class="fas fa-envelope me-2"></i>Email Support
+                </a>
+             
+            </div>
+            </div>
+
+            </div>
+
+        {% elif current_section == 'about' %}
+            <div class="text-center py-4">
+                <h2 class="fw-bold text-dark mb-4">About SecureAuth</h2>
+                <p class="lead text-muted mb-4">A Django-based authentication system built for simplicity and clarity.</p>
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="card h-100 shadow-sm">
+                            <div class="card-body">
+                                <h5 class="card-title">Key Features</h5>
+                                <ul class="list-unstyled">
+                                    <li>🔐 User Registration & Login</li>
+                                    <li>📧 Password Reset via Email</li>
+                                    <li>⚙️ Profile Dashboard</li>
+                                    
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card h-100 shadow-sm">
+                            <div class="card-body">
+                                <h5 class="card-title">Technologies Used</h5>
+                                <ul class="list-unstyled">
+                                    <li>🧪 Django + Python</li>
+                                    <li>🎨 Bootstrap 5</li>
+                                    <li>📄 HTML & CSS</li>
+                                    <li>💡 SQLite (or Django ORM)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        {% else %}
+            <div class="text-center p-4">
+                <h3 class="h3 fw-bold text-dark mb-4">Section Not Found</h3>
+                <p class="text-muted">Please use the navigation tabs to explore available sections.</p>
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="mt-5 pt-4 border-top w-100 text-center">
+        <a href="{% url 'logout' %}" class="btn btn-custom-danger px-5 py-3">Sign Out</a>
+    </div>
+</div>
+{% endblock %}

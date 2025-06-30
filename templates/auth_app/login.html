@@ -1,0 +1,38 @@
+<!-- auth_project/templates/auth_app/login.html -->
+{% extends 'auth_app/base.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<div class="register-card p-5 mt-5"> {# Applied register-card class #}
+    <h2 class="text-center mb-5 fw-bold text-dark">Welcome Back!</h2>
+    <form method="post" class="needs-validation" novalidate>
+        {% csrf_token %}
+        {% if form.errors %}
+            <div class="alert alert-danger fade show mb-4" role="alert">
+                <strong class="fw-bold">Error!</strong>
+                <span class="d-block d-sm-inline">Your username or password was incorrect.</span>
+            </div>
+        {% endif %}
+        {% for field in form %}
+            <div class="mb-4">
+                <label class="form-label fw-semibold text-muted" for="{{ field.id_for_label }}">
+                    {{ field.label }}
+                </label>
+                {{ field }}
+                {% if field.errors %}
+                    {% for error in field.errors %}
+                        <div class="text-danger small mt-1">{{ error }}</div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        {% endfor %}
+        <button type="submit" class="btn w-100 py-2 mt-2 register-btn-custom-primary">Login</button> {# Applied register-btn-custom-primary #}
+    </form>
+    <a href="{% url 'password_reset' %}" class="register-link-custom-button d-block text-center mt-3">Forgot Password?</a> {# Applied register-link-custom-button #}
+    <div class="text-center text-muted small mt-4">
+        Don't have an account?
+        <a href="{% url 'register' %}" class="register-link-custom-button">Sign Up</a> {# Applied register-link-custom-button #}
+    </div>
+</div>
+{% endblock %}

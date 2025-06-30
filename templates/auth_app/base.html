@@ -1,0 +1,350 @@
+<!-- auth_project/templates/auth_app/base.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}SecureAuth{% endblock %}</title>
+    <!-- Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Bootstrap CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" xintegrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Custom background gradient for entire app */
+            background: linear-gradient(to bottom right, #eff6ff, #e9d5ff); /* A light blue to light purple gradient */
+            background-attachment: fixed; /* Keep background fixed during scroll */
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Custom styling for Django form fields to apply Bootstrap classes */
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            border-radius: 0.5rem; /* Rounded corners for input fields */
+            padding: 0.75rem 1rem; /* Padding adjustment */
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        }
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="password"]:focus {
+            border-color: #80bdff; /* Bootstrap blue focus color */
+            box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25); /* Bootstrap blue shadow */
+        }
+
+        /* Styles for the tech logos in the About section */
+        .tech-logo {
+            height: 24px;
+            margin-right: 8px;
+            vertical-align: middle;
+            display: inline-block;
+        }
+
+        /* General Custom button styles (for Login, Dashboard Sign Out, etc.) */
+        .btn-custom-primary {
+            background: linear-gradient(to right, #2563eb, #6d28d9); /* Blue-indigo gradient */
+            border: none;
+            color: white;
+            font-weight: bold;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease-in-out;
+            transform: scale(1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .btn-custom-primary:hover {
+            background: linear-gradient(to right, #1d4ed8, #5b21b6); /* Darker on hover */
+            transform: scale(1.05);
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-custom-danger {
+            background: linear-gradient(to right, #dc2626, #be185d); /* Red-pink gradient */
+            border: none;
+            color: white;
+            font-weight: bold;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease-in-out;
+            transform: scale(1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .btn-custom-danger:hover {
+            background: linear-gradient(to right, #b91c1c, #9d174d); /* Darker on hover */
+            transform: scale(1.05);
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-custom-success {
+            background: linear-gradient(to right, #10b981, #059669); /* Teal-green gradient */
+            border: none;
+            color: white;
+            font-weight: bold;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease-in-out;
+            transform: scale(1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .btn-custom-success:hover {
+            background: linear-gradient(to right, #047857, #065f46); /* Darker on hover */
+            transform: scale(1.05);
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .link-custom-button {
+            color: #2563eb; /* Blue text color */
+            font-size: 0.875rem; /* text-sm equivalent */
+            font-weight: 500; /* font-medium equivalent */
+            transition: color 0.15s ease-in-out;
+            text-decoration: none; /* remove underline by default */
+        }
+        .link-custom-button:hover {
+            color: #1d4ed8; /* Darker blue on hover */
+            text-decoration: underline; /* add underline on hover */
+        }
+
+        /* Custom styles for accordion (Help Section) */
+        .accordion-button.custom-accordion-button {
+            background-color: #fff;
+            color: #212529; /* Dark text for default */
+            border: 1px solid #dee2e6; /* Light grey border */
+            border-radius: 0.5rem;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+            font-weight: bold;
+            text-align: left;
+            padding: 1rem 1.25rem;
+            width: 100%; /* Ensure full width */
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.2s ease-in-out;
+        }
+        .accordion-button.custom-accordion-button:not(.collapsed) {
+            color: #0056b3; /* Darker blue for active */
+            background-color: #e9f5ff; /* Light blue background for active */
+            border-color: #a7d9fe;
+            box-shadow: inset 0 -1px 0 rgba(0,0,0,.125);
+            border-bottom-left-radius: 0; /* No bottom radius when open */
+            border-bottom-right-radius: 0;
+        }
+        .accordion-body.custom-accordion-body {
+            background-color: #f8f9fa; /* Light grey background for body */
+            border: 1px solid #dee2e6;
+            border-top: none; /* No top border if part of same item */
+            border-bottom-left-radius: 0.5rem;
+            border-bottom-right-radius: 0.5rem;
+            padding: 1.25rem;
+            text-align: left;
+            color: #495057; /* Darker text */
+        }
+        /* Icon rotation for accordion */
+        .accordion-button.custom-accordion-button:not(.collapsed)::after {
+            transform: rotate(180deg);
+        }
+        .accordion-button.custom-accordion-button::after {
+            flex-shrink: 0;
+            width: 1.25rem;
+            height: 1.25rem;
+            margin-left: auto;
+            content: "";
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23212529'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-size: 1.25rem;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        /* NEW STYLES FROM USER'S register.html - Apply to body only if needed globally */
+        /* Note: If you want this specific background ONLY for register page, keep it in register.html's extra_head */
+        /* For now, integrating it into the main body style to demonstrate centralizing */
+        body {
+            background: linear-gradient(to right, #e0c3fc, #8ec5fc); /* Specific gradient for register/login pages */
+            background-attachment: fixed;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        /* Ensure the other gradient is commented out or removed if this is preferred globally */
+
+        .register-card {
+            background: #ffffff;
+            border-radius: 1rem;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.8s ease;
+            max-width: 420px;
+            margin: 0 auto;
+        }
+
+        /* New button/link styles specifically for the register/login pages */
+        /* These will override the general .btn-custom-primary etc. if applied to the same elements */
+        .register-btn-custom-primary {
+            background-color: #6f42c1; /* Purple */
+            color: white;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none; /* Ensure no default bootstrap border */
+            border-radius: 0.5rem; /* Consistent border-radius */
+            padding: 0.75rem 1rem; /* Consistent padding */
+        }
+        .register-btn-custom-primary:hover {
+            background-color: #5a379d; /* Darker purple on hover */
+            color: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .register-link-custom-button {
+            color: #6f42c1; /* Purple */
+            font-weight: 500;
+            text-decoration: none;
+        }
+        .register-link-custom-button:hover {
+            text-decoration: underline;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(25px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+.custom-footer {
+  background-color:rgb(235, 239, 245); /* Dark gray */
+  color:rgb(26, 24, 24);
+}
+
+.custom-footer a.footer-link {
+  color:rgba(22, 21, 21, 0.8);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.custom-footer a.footer-link:hover {
+  color:rgb(15, 15, 15);
+  text-decoration: underline;
+}
+
+.custom-footer h5,
+.custom-footer h6 {
+  color:rgb(11, 11, 11);
+}
+
+.footer-bottom {
+  background-color:rgb(125, 127, 131);
+  color:rgb(21, 21, 21);
+}
+
+    </style>
+</head>
+<body class="d-flex flex-column">
+    <header class="w-100 bg-white shadow-sm p-3 mb-5">
+        <div class="container d-flex justify-content-between align-items-center">
+            <h1 class="h3 fw-bold text-dark mb-0">SecureAuth</h1>
+        <nav>
+    {% if user.is_authenticated %}
+        <span class="text-muted me-3 d-none d-sm-inline">
+            Welcome, <span class="fw-semibold">{{ user.username }}</span>!
+        </span>
+        <a href="{% url 'logout' %}" class="btn btn-custom-danger px-4 py-2">Sign Out</a>
+    {% else %}
+        {% if request.resolver_match.url_name != 'login' and request.resolver_match.url_name != '' %}
+            <a href="{% url 'login' %}" class="btn btn-custom-primary px-4 py-2">Login</a>
+        {% endif %}
+        {% if request.resolver_match.url_name != 'register' %}
+            <a href="{% url 'register' %}" class="btn btn-custom-primary px-4 py-2 ms-2">Sign Up</a>
+        {% endif %}
+    {% endif %}
+</nav>
+
+    </header>
+
+    <main class="flex-grow-1 d-flex align-items-center justify-content-center p-4">
+        {% block content %}
+        {% endblock %}
+    </main>
+<footer class="custom-footer mt-5">
+  <div class="container py-5">
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <h5 class="fw-bold text-primary">SecureAuth</h5>
+        <p class="small text-muted">
+          A secure and minimal Django-based authentication system for modern web apps.
+        </p>
+      </div>
+
+      <div class="col-md-6 mb-3">
+        <h6 class="fw-bold text-primary">Contact & Support</h6>
+        <ul class="list-unstyled">
+          <li>
+            <a href="mailto:support@secureauth.com" class="footer-link">
+  <i class="fas fa-envelope me-2"></i> Email Us
+</a>
+          </li>
+        
+          <li>
+            <a href="#" class="footer-link" data-bs-toggle="modal" data-bs-target="#privacyModal">
+  <i class="fas fa-file-alt"></i> Privacy Policy
+</a>
+
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-bottom text-center py-3 text-muted">
+    &copy; {% now "Y" %} SecureAuth. All rights reserved.
+    <p class="mb-0"><small>Made with <i class="fas fa-heart text-danger"></i> and <i class="fas fa-lock text-info"></i> in India</small></p>
+  </div>
+</footer>
+<div class="modal fade" id="privacyModal" tabindex="-1" aria-labelledby="privacyModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="privacyModalLabel">Privacy Policy</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-start">
+        <p>We respect your privacy. This dialog explains how we handle your data in SecureAuth.</p>
+        <h6>Information We Collect</h6>
+        <p>We collect basic account information, login times, and email addresses strictly for authentication purposes.</p>
+        <h6>How We Use Your Data</h6>
+        <p>Your data is used only for authentication and security. We do not share it with third parties.</p>
+        <h6>Your Rights</h6>
+        <p>You can request deletion or correction of your data by emailing us at <a href="mailto:support@secureauth.com" class="link-custom-button">support@secureauth.com</a>.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-custom-primary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  window.botpressWebChat.init({
+    host: 'https://cdn.botpress.cloud/webchat/v2',
+    botId: 'YOUR_BOT_ID',
+    hideWidget: true
+  })
+</script>
+
+
+
+
+<script src="https://cdn.botpress.cloud/webchat/v2.3/inject.js"></script>
+<script src="https://files.bpcontent.cloud/2025/03/22/14/20250322143833-WLKCAUV0.js"></script>
+
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" xintegrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>
+
+

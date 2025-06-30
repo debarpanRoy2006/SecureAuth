@@ -1,0 +1,30 @@
+<!-- auth_project/templates/auth_app/register.html -->
+{% extends 'auth_app/base.html' %}
+
+{% block title %}Register{% endblock %}
+
+{% block content %}
+<div class="register-card p-5 mt-5">
+    <h2 class="text-center mb-4 fw-bold text-dark">Create Your Account</h2>
+    <form method="post" class="needs-validation" novalidate>
+        {% csrf_token %}
+        {% for field in form %}
+            <div class="mb-4">
+                <label class="form-label fw-semibold text-muted" for="{{ field.id_for_label }}">
+                    {{ field.label }}
+                </label>
+                {{ field }}
+                {% if field.errors %}
+                    {% for error in field.errors %}
+                        <div class="text-danger small mt-1">{{ error }}</div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        {% endfor %}
+        <button type="submit" class="btn w-100 py-2 mt-2 register-btn-custom-primary">Sign Up</button>
+    </form>
+    <div class="text-center text-muted small mt-4">
+        Already have an account? <a href="{% url 'login' %}" class="register-link-custom-button">Login</a>
+    </div>
+</div>
+{% endblock %}
