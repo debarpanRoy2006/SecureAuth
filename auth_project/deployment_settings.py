@@ -10,7 +10,10 @@ ALLOWED_HOSTS = ["secureauth-7xqy.onrender.com", "localhost", "127.0.0.1"]
 
 # Static files
 STATIC_URL = "/static/"
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles") # Change this line
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+ # Change this line
 
 # Only keep this if you truly have a /static folder in the repo
 # If you have a 'static' folder at your project root containing global static files, keep this.
