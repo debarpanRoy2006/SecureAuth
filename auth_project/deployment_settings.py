@@ -6,7 +6,7 @@ DEBUG = False
 
 SECRET_KEY = os.environ.get("SECRET_KEY", SECRET_KEY)
 
-ALLOWED_HOSTS = ["gitcommittracker.onrender.com", "localhost", "127.0.0.1"]
+ALLOWED_HOSTS = ["SecureAuth.onrender.com", "localhost", "127.0.0.1"]
 
 # STATIC files for deployment
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
