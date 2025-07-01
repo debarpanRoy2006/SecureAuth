@@ -250,9 +250,10 @@
             <h1 class="h3 fw-bold text-dark mb-0">SecureAuth</h1>
         <nav>
     {% if user.is_authenticated %}
-        <span class="text-muted me-3 d-none d-sm-inline">
-            Welcome, <span class="fw-semibold">{{ user.username }}</span>!
-        </span>
+        <span class="text-muted me-3">
+    Welcome, <span class="fw-semibold">{{ user.username }}</span>!
+</span>
+
         <a href="{% url 'logout' %}" class="btn btn-custom-danger px-4 py-2">Sign Out</a>
     {% else %}
         {% if request.resolver_match.url_name != 'login' and request.resolver_match.url_name != '' %}
