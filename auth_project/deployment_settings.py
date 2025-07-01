@@ -10,7 +10,7 @@ ALLOWED_HOSTS = ["SecureAuth.onrender.com", "localhost", "127.0.0.1"]
 
 # Static files
 STATIC_URL = "/static/"
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 # Only keep this if you truly have a /static folder in the repo
 STATICFILES_DIRS = [
