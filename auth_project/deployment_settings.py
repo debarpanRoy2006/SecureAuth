@@ -13,7 +13,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 STATIC_URL = "/static/"
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "tracker", "static"),
+    os.path.join(BASE_DIR, "static"),
 ]
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
@@ -25,10 +25,9 @@ MIDDLEWARE.insert(
 
 # Templates location
 TEMPLATES[0]["DIRS"] = [
-    os.path.join(BASE_DIR, "tracker", "templates"),
+    os.path.join(BASE_DIR, "templates"),
 ]
 
-# Database config
 DATABASES = {
     "default": dj_database_url.config(
         conn_max_age=600,
