@@ -8,10 +8,11 @@ SECRET_KEY = os.environ.get("SECRET_KEY", SECRET_KEY)
 
 ALLOWED_HOSTS = ["SecureAuth.onrender.com", "localhost", "127.0.0.1"]
 
-# STATIC files for deployment
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+# Static files
 STATIC_URL = "/static/"
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
+# Only keep this if you truly have a /static folder in the repo
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
@@ -23,7 +24,6 @@ MIDDLEWARE.insert(
     "whitenoise.middleware.WhiteNoiseMiddleware",
 )
 
-# Templates location
 TEMPLATES[0]["DIRS"] = [
     os.path.join(BASE_DIR, "templates"),
 ]
