@@ -6,7 +6,7 @@ DEBUG = False
 
 SECRET_KEY = os.environ.get("SECRET_KEY", SECRET_KEY)
 
-ALLOWED_HOSTS = ["SecureAuth.onrender.com", "localhost", "127.0.0.1"]
+ALLOWED_HOSTS = ["secureauth-7xqy.onrender.com", "localhost", "127.0.0.1"]
 
 # Static files
 STATIC_URL = "/static/"
